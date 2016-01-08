@@ -1,0 +1,7 @@
+[user]
+	name = Adrien Pachkoff
+	email = apachkof@student.42.fr
+[push]
+	default = simple
+[core]
+	excludesfile = /tmp/.apachkof_rhome/.dotefiles/.gitignore_global
