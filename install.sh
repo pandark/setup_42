@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 
 if [ -z "$(git config --global user.name)" ]; then
-    git config --global user.name 'Adrien Pachkoff'
+    git config --global user.name "$FULLNAME"
 fi
 if [ -z "$(git config --global user.email)" ]; then
-    git config --global user.email 'apachkof@student.42.fr'
+    git config --global user.email "$MAIL"
 fi
 
 if [ -z "$(git config --global core.excludesfile)" ]; then
