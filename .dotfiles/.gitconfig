@@ -4,4 +4,4 @@
 [push]
 	default = simple
 [core]
-	excludesfile = /tmp/.apachkof_rhome/.dotefiles/.gitignore_global
+	excludesfile = /tmp/.apachkof_rhome/.dotfiles/.gitignore_global
