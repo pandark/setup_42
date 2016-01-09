@@ -1,5 +1,8 @@
 if [ -z "$USER" ]; then
-    export USER=$(whoami)
+    export USER="$(id -un)"
+fi
+if [ -z "$USER_FULLNAME" ]; then
+    export USER_FULLNAME="$(id -F)"
 fi
 if [ -z "$EMAIL" ]; then
     export MAIL="$USER@student.42.fr"
