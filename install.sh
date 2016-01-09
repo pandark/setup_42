@@ -10,6 +10,9 @@ fi
 if [ -z "$(git config --global core.excludesfile)" ]; then
     git config --global core.excludesfile "$REMOTE_HOME/.dotfiles/.gitignore_global"
 fi
+if [ -z "$(git config --global push.default)" ]; then
+    git config --global push.default "simple"
+fi
 
 if [ ! -f "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" ] ; then
      curl -Lo "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" https://raw.githubusercontent.com/Homebrew/homebrew/master/Library/Contributions/brew_zsh_completion.zsh
