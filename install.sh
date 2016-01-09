@@ -8,7 +8,7 @@ if [ -z "$(git config --global user.email)" ]; then
 fi
 
 if [ -z "$(git config --global core.excludesfile)" ]; then
-    git config --global core.excludesfile "$REMOTE_HOME/.dotefiles/.gitignore_global"
+    git config --global core.excludesfile "$REMOTE_HOME/.dotfiles/.gitignore_global"
 fi
 
 if [ ! -f "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" ] ; then
