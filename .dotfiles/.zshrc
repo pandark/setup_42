@@ -1,8 +1,8 @@
 if [ -z "$USER" ]; then
     export USER="$(id -un)"
 fi
-if [ -z "$USER_FULLNAME" ]; then
-    export USER_FULLNAME="$(id -F)"
+if [ -z "$FULLNAME" ]; then
+    export FULLNAME="$(id -F)"
 fi
 if [ -z "$EMAIL" ]; then
     export MAIL="$USER@student.42.fr"
