@@ -93,8 +93,10 @@ if [ -n "$(which-command npm)" ]; then
     npm config set prefix '${REMOTE_HOME}/.npm-packages'
 fi
 
-rm $HOME/.zshrc
-curl -fLo "$HOME/.zshrc" https://raw.githubusercontent.com/pandark/setup_42/master/.dotfiles/.zshrc
+
+if [ ! -f "$HOME/.zshrc" ] ; then
+    curl -fLo "$HOME/.zshrc" https://raw.githubusercontent.com/pandark/setup_42/master/.dotfiles/.zshrc
+fi
 
 # Install XQuartz, reboot, then...
 if [ -n "$(which-command Xquartz)" ]; then
