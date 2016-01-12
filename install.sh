@@ -14,10 +14,6 @@ if [ -z "$(git config --global push.default)" ]; then
     git config --global push.default "simple"
 fi
 
-if [ ! -f "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" ] ; then
-     curl -Lo "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" https://raw.githubusercontent.com/Homebrew/homebrew/master/Library/Contributions/brew_zsh_completion.zsh
-fi
-
 cd ~/
 for f in ".zshrc" ".config" ".gitconfig" ".gitignore_global" ".npmrc" ".ssh" ".gdbinit" ".lldbinit" ".ocamlinit"; do
     rm -Rf $f;
@@ -30,11 +26,14 @@ for f in ".nvimlog" ".opam" ".lesshst" ".zcompdump"; do
     ln -s ${REMOTE_HOME}/$f;
 done
 
-
 if [ ! -d "${REMOTE_HOME}/.brew" ]; then
     mkdir ${REMOTE_HOME}/.brew && \
         curl -L https://github.com/Homebrew/homebrew/tarball/master | \
         tar xz --strip 1 -C ${REMOTE_HOME}/.brew
+fi
+
+if [ ! -f "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" ] ; then
+     curl -Lo "${REMOTE_HOME}/.brew/share/zsh/site-functions/_brew" https://raw.githubusercontent.com/Homebrew/homebrew/master/Library/Contributions/brew_zsh_completion.zsh
 fi
 
 if [ "$(which brew)" = "${REMOTE_HOME}/.brew/bin/brew" ]; then
