@@ -4,7 +4,7 @@ fi
 if [ -z "$FULLNAME" ]; then
     export FULLNAME="$(id -F)"
 fi
-if [ -z "$EMAIL" ]; then
+if [ -z "$MAIL" ]; then
     export MAIL="$USER@student.42.fr"
 fi
 if [ -z "$GROUP" ]; then
