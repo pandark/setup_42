@@ -66,13 +66,14 @@ brew install python
 brew install python3
 
 # Install XQuartz, reboot, then...
-#brew install ocaml --with-x11
-#brew install rlwrap
-#brew install opam
-#opam init
-# (<RET> ... wait ... a ... long ... time ...)
-# sed -i -E "s#/nfs/.*/$USER/#\${REMOTE_HOME}/#g" ~/.opam/opam-init/init.*
-#eval $(opam config env)
+if [ -n "$(which-command Xquartz)" ]; then
+brew install ocaml --with-x11
+brew install rlwrap
+brew install opam
+opam init
+sed -i -E "s#/nfs/.*/$USER/#\${REMOTE_HOME}/#g" ~/.opam/opam-init/init.*
+eval $(opam config env)
+fi
 #opam switch 4.02.0
 #eval $(opam config env)
 #opam install lablgtk
