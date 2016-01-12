@@ -4,7 +4,7 @@ My setup at 42
 # Get and load the .zshrc
 
 ``` sh
-curl -Lo ${HOME}/.zshrc https://github.com/pandark/setup_42/blob/master/.dotfiles/.zshrc
+curl -Lo ${HOME}/.zshrc https://raw.githubusercontent.com/pandark/setup_42/master/.dotfiles/.zshrc
 source ${HOME}/.zshrc
 ```
 
