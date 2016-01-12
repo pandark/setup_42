@@ -25,7 +25,7 @@ export HOMEBREW_CACHE="${REMOTE_HOME}/.tmp/brew_cache"
 
 export NPM_PACKAGES=${REMOTE_HOME}/.npm-packages
 export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
-export PATH="${REMOTE_HOME}/.brew/bin:${NPM_PACKAGES}/bin:${REMOTE_HOME}/.meteor:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/texbin"
+export PATH="${REMOTE_HOME}/.brew/bin:${NPM_PACKAGES}/bin:${REMOTE_HOME}/.meteor:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/munki"
 #export MANPATH="${MANPATH}"
 
 if [ -f ${REMOTE_HOME}/.opam/opam-init/init.zsh ]; then
