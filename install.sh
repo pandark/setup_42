@@ -106,6 +106,7 @@ if [ -n "$(which-command Xquartz)" ]; then
     opam init
     sed -i -E "s#/nfs/.*/$USER/#\${REMOTE_HOME}/#g" $HOME/.opam/opam-init/init.*
     eval $(opam config env)
+    opam install ocamlfind
 else
     echo "Install XQuartz with Managed Software Center, reboot, then launch install.sh again"
 fi
