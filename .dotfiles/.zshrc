@@ -11,28 +11,22 @@ if [ -z "$GROUP" ]; then
     export GROUP=$(id -gn $USER)
 fi
 
-export REMOTE_HOME="/tmp/.${USER}_rhome"
+export HOMEBREW_CACHE="${HOME}/.tmp/brew_cache"
 
-if [ ! -d "${REMOTE_HOME}" ]; then
-    mkdir "${REMOTE_HOME}"
-fi
-if [ -z "$(mount | grep "${REMOTE_HOME}")" ]; then
-    mount -t nfs zfs-student-1:/tank/sgoinfre/goinfre/Perso/Students/${USER} \
-        ${REMOTE_HOME}
-fi
-
-export HOMEBREW_CACHE="${REMOTE_HOME}/.tmp/brew_cache"
-
-export NPM_PACKAGES=${REMOTE_HOME}/.npm-packages
+# NodeJs
+export NPM_PACKAGES=${HOME}/.npm-packages
 export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
-export PATH="${REMOTE_HOME}/.brew/bin:${NPM_PACKAGES}/bin:${REMOTE_HOME}/.meteor:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/munki"
+
+export PATH="${HOME}/.brew/bin:${NPM_PACKAGES}/bin:${HOME}/.meteor:/usr/local/munki:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin"
 #export MANPATH="${MANPATH}"
 
-if [ -f ${REMOTE_HOME}/.opam/opam-init/init.zsh ]; then
-    source ${REMOTE_HOME}/.opam/opam-init/init.zsh
+# VirtualenvWrapper
+export WORKON_HOME="${HOME}/.envs"
+if [ -f "${HOME}/.brew/bin/virtualenvwrapper.sh" ]; then
+    source  "${HOME}/.brew/bin/virtualenvwrapper.sh"
 fi
 
-if  [ -n "$(which-command nvim 2>/dev/null)" ] ; then
+if  [ -n "$(whence nvim 2>/dev/null)" ] ; then
     export EDITOR="nvim"
 fi
 
@@ -64,7 +58,7 @@ bindkey "^[[1;5D" backward-word
 
 # zsh history
 
-HISTFILE=${REMOTE_HOME}/.zsh_history
+HISTFILE="${HOME}/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 
@@ -87,8 +81,8 @@ zstyle ':completion:*' menu select
 autoload -U colors && colors
 
 # add completion provied by bin installed via brew
-if [[ -d "${REMOTE_HOME}/.brew/share/zsh/site-functions" ]]; then
-    fpath=(${REMOTE_HOME}/.brew/share/zsh/site-functions $fpath)
+if [[ -d "${HOME}/.brew/share/zsh/site-functions" ]]; then
+    fpath=(${HOME}/.brew/share/zsh/site-functions $fpath)
 fi
 
 ######################
@@ -109,6 +103,8 @@ esac # >>>
 if [ "$COLOR_TERM" ]; then
     # export GREP_COLOR='1;32'
     export GREP_OPTIONS='--color=auto'
+    alias grep="/usr/bin/grep $GREP_OPTIONS"
+    unset GREP_OPTIONS
     # find the option for using colors in ls, depending on the version: GNU or BSD
     ls --color -d . &>/dev/null 2>&1 \
         && alias ls='ls --group-directories-first --color=auto' \
@@ -162,45 +158,6 @@ setopt prompt_subst
 RPROMPT='${vcs_info_msg_0_}'
 PROMPT="${PS_time} ${PS_user}:${PS_cwd}
 ${PS_prompt}"
-
-#NORMAL="%{$reset_color%}"
-## Definition du prompt
-#prompt_hook ()
-#{
-#    if [ $? -eq 0 ] ; then
-#        COLOR3="%{$fg[green]%}"
-#    else
-#        COLOR3="%{$fg[red]%}"
-#    fi
-#    ISGIT=$(git status --ignore-submodules 2> /dev/null)
-#    if [ -n "$ISGIT" ] ; then
-#        STATUS=$(echo "$ISGIT" | grep "modified:\|renamed:\|new file:\|deleted:" | grep -v ".vim/bundle\|untracked")
-#        BRANCH=$(git branch | cut -d ' ' -f 2 | tr -d '\n')
-#        if [ -n "$STATUS" ] ; then
-#            COLOR="%{$fg[red]%}"
-#        else
-#            REMOTE_EXIST=$(git branch -a | grep remotes/origin/$BRANCH)
-#            if [ -n "$REMOTE_EXIST" ] ; then
-#                REMOTE=$(git diff --ignore-submodules origin/$BRANCH)
-#                if [ -n "$REMOTE" ] ; then
-#                    COLOR="%{$fg[yellow]%}"
-#                else
-#                    COLOR="%{$fg[green]%}"
-#                fi
-#            else
-#                COLOR="%{$fg[green]%}"
-#            fi
-#        fi
-#        RPROMPT="%{$COLOR%}($BRANCH)%{$NORMAL%}"
-#    else
-#        RPROMPT=""
-#    fi
-#    PROMPT="%B%{$fg[green]%}%n@%m%{$NORMAL%}%B:%{$fg[blue]%}%~%{$NORMAL%}
-#    %B%{$COLOR3%}> %{$NORMAL%}%b"
-#}
-#
-#[[ -z $precmd_functions ]] && precmd_functions=()
-#precmd_functions=($precmd_functions prompt_hook)
 
 #######################
 #    LS EN COULEUR    #
@@ -265,33 +222,26 @@ unalias la 2>/dev/null
 unalias lah 2>/dev/null
 unalias lh 2>/dev/null
 alias l='ls -lAG'
+#alias l='ls -lA --color=auto'
 #alias ls=exa
-#alias l='exa -l --group --git -A'
-#alias ll='exa -l --group --git'
-#alias la='exa -l --group --git -a'
-#alias lg='exa -l --group --git --grid'
-#alias lt='exa -l --group --git --tree'
 
 alias vi='nvim'
 alias vim='nvim'
 alias neovim='nvim'
+alias vimdiff='nvim -d'
+alias view='nvim -R'
 
 alias gdb='lldb'
 
-alias vim_clean='find "${REMOTE_HOME}/.tmp/nvim" -mindepth 1 -delete'
-alias npm_clean='find "${REMOTE_HOME}/.npm-packages" -mindepth 1 -delete'
+alias vim_clean='find "${HOME}/.tmp/nvim" -mindepth 1 -delete'
+alias npm_clean='find "${HOME}/.npm-packages" -mindepth 1 -delete'
 alias redshift_stop='kill $(pgrep redshift)'
-
-alias ocaml='rlwrap ocaml'
-alias ocalm='rlwrap ocaml'
-alias v='vi *.ml'
-alias o='ocamlopt *.ml'
 
 #######################
 #   START PROGRAMS    #
 #######################
 
-if [ -n "$(which-command redshift)" -a -z "$(pgrep redshift)" ] ; then
+if [ -n "$(whence redshift)" -a -z "$(pgrep redshift)" ] ; then
     echo "launching redshift"
     nohup redshift 2>&1 >/dev/null &
 fi

@@ -10,5 +10,4 @@ rm install.sh
 
 # Manual steps
 
-* Read the end of `install.sh` for opam install.
 * Open `nvim` and run :PlugInstall
