@@ -49,13 +49,6 @@ for f in ".zshrc" ".config/nvim/init.vim" ".config/agrc" ".config/redshift.conf"
     fi
 done
 
-for f in ".nvimlog" ".lesshst" ".zcompdump"; do
-    if [ ! -L $f ]; then
-        rm -Rf $f
-        ln -s ${HOME}/$f
-    fi
-done
-
 if [ ! -d "${HOME}/.brew" ]; then
     mkdir ${HOME}/.brew && \
         curl -L https://github.com/Homebrew/homebrew/tarball/master | \
