@@ -128,6 +128,8 @@ unalias la 2>/dev/null
 unalias lah 2>/dev/null
 unalias lh 2>/dev/null
 alias l='ls -lA'
+alias ll='ls -l'
+alias la='ls -A'
 
 if  [ -n "$(whence nvim 2>/dev/null)" ] ; then
   alias vi='nvim'
@@ -160,6 +162,9 @@ alias gu="git add -u"
 #alias git-fetch='( ssh-add -l > /dev/null || ssh-add ) && git fetch'
 
 alias wether='curl -s http://wttr.in/Paris | head -17'
+
+# tmux with 256 colors
+alias tmux="tmux -2"
 
 # cleanup
 alias vim_clean='find "${HOME}/.tmp/nvim" -mindepth 1 -delete'
