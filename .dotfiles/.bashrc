@@ -25,8 +25,10 @@ fi
 export HOMEBREW_CACHE="${HOME}/.tmp/brew_cache"
 
 # NodeJs
-export NPM_PACKAGES=${HOME}/.npm-packages
-export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
+if [ "${USER} != "root" ]; then
+  export NPM_PACKAGES=${HOME}/.npm-packages
+  export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
+fi
 
 export PATH="${HOME}/.brew/bin:${NPM_PACKAGES}/bin:${HOME}/.meteor:/usr/local/munki:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 #export MANPATH="${MANPATH}"
