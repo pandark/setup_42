@@ -62,6 +62,9 @@ zstyle ':completion:*' menu select
 if [[ -d "${HOME}/.brew/share/zsh/site-functions" ]]; then
   fpath=(${HOME}/.brew/share/zsh/site-functions $fpath)
 fi
+if [ -f /usr/lib/node_modules/npm/lib/utils/completion.sh ]; then
+  source /usr/lib/node_modules/npm/lib/utils/completion.sh
+fi
 
 # make cd implicit to move into directories
 setopt auto_cd

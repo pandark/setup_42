@@ -54,6 +54,9 @@ HISTCONTROL=ignoredups:ignorespace
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
   source /etc/bash_completion
 fi
+if [ -f /usr/lib/node_modules/npm/lib/utils/completion.sh ]; then
+  source /usr/lib/node_modules/npm/lib/utils/completion.sh
+fi
 
 # make cd implicit to move into directories
 shopt -s autocd
