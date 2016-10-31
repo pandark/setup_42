@@ -1,3 +1,6 @@
+# if not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 ######################
 #        USER        #
 ######################
@@ -28,71 +31,40 @@ export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
 export PATH="${HOME}/.brew/bin:${NPM_PACKAGES}/bin:${HOME}/.meteor:/usr/local/munki:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 #export MANPATH="${MANPATH}"
 
-if  [ -n "$(whence nvim 2>/dev/null)" ] ; then
+if  [ -n "$(type nvim 2>/dev/null)" ] ; then
   export EDITOR="nvim"
 else
   export EDITOR="vim"
 fi
 
 ######################
-#      CONF ZSH      #
+#      CONF BASH     #
 ######################
 
-bindkey -e # vim rocks but zsh vim-bindings suck
+set -o emacs # vim rocks but bash vim-bindings suck
 
-# zsh history
-HISTFILE="${HOME}/.zsh_history"
+# bash history
+# ignore duplicate lines and lines starting with a space
 HISTSIZE=10000
-SAVEHIST=10000
-setopt append_history
-setopt extended_history
-setopt hist_expire_dups_first
-setopt hist_ignore_dups # ignore duplication command history list
-setopt hist_ignore_space
-setopt hist_verify
-setopt inc_append_history
-setopt share_history # share command history data
+HISTFILESIZE=10000
+shopt -s histappend
+HISTCONTROL=ignoredups:ignorespace
 
-# zsh completion
-# better autocomplete
-autoload -U compinit && compinit
-# autocomplete menu
-zstyle ':completion:*' menu select
-# add completion provied by bin installed via brew
-if [[ -d "${HOME}/.brew/share/zsh/site-functions" ]]; then
-  fpath=(${HOME}/.brew/share/zsh/site-functions $fpath)
+# enable programmable completion features
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+  source /etc/bash_completion
 fi
 
 # make cd implicit to move into directories
-setopt auto_cd
-# if a var contains a dirs, use this var name
-setopt auto_name_dirs
-# pushd instead of cd (unpile with popd)
-setopt auto_pushd
-setopt pushd_ignore_dups
+shopt -s autocd
 
-# delete key
-bindkey "\e[3~"   delete-char
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
 
-# home / end
-bindkey '\e[H' beginning-of-line
-bindkey '\e[F' end-of-line
-
-# search in history based on what is type
-bindkey '\e[A' history-beginning-search-backward
-bindkey '\e[B' history-beginning-search-forward
-bindkey '^[[A' history-beginning-search-backward
-bindkey '^[[B' history-beginning-search-forward
-
-bindkey '^[[Z' reverse-menu-complete
-bindkey ' ' magic-space  # also do history expansion on space
-
-# ctrl + arrows
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
-
-# prompt color
-autoload -U colors && colors
+# prevent ^S and ^Q doing XON/XOFF (mostly for Vim)
+stty -ixon
+# >>>
 
 ######################
 #       ALIASES      #
@@ -129,7 +101,7 @@ unalias lah 2>/dev/null
 unalias lh 2>/dev/null
 alias l='ls -lA'
 
-if  [ -n "$(whence nvim 2>/dev/null)" ] ; then
+if  [ -n "$(type nvim 2>/dev/null)" ] ; then
   alias vi='nvim'
   alias vim='nvim'
   alias neovim='nvim'
@@ -167,47 +139,69 @@ alias npm_clean='find "${HOME}/.npm-packages" -mindepth 1 -delete'
 alias redshift_stop='kill $(pgrep redshift)'
 
 ######################
-#    PROMPT ZSH      #
+#    PROMPT BASH     #
 ######################
 
 # version control
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git hg svn
-zstyle ':vcs_info:*'  formats $PS_vcsinfo" [‡ %b]"
-zstyle ':vcs_info:hg*'  formats $PS_vcsinfo" [☿ %b]"
-zstyle ':vcs_info:git*' formats $PS_vcsinfo" [± %b]"
-precmd() {
-  vcs_info
-}
+# http://blog.grahampoulter.com/2011/09/show-current-git-bazaar-or-mercurial.html
+__vcs_info() {
+  local dir="$PWD"
+  local logo="#"
+  local vcs
+  local branch
+  while [[ "$dir" != "/" ]]; do
+    for vcs in git hg svn bzr; do
+      if [[ -d "$dir/.$vcs" ]] && hash "$vcs" &>/dev/null; then
+        case "$vcs" in
+          git)
+            logo="±"; branch=$(git branch 2>/dev/null | grep ^\* | sed s/^\*.//);;
+          hg)
+            logo="☿"; branch=$(hg branch 2>/dev/null);;
+          svn)
+            logo="‡"; branch=$(svn info 2>/dev/null\
+                | grep -e '^Repository Root:'\
+                | sed -e 's#.*/##');;
+          bzr)
+            local conf="${dir}/.bzr/branch/branch.conf" # normal branch
+            [[ -f "$conf" ]] && branch=$(grep -E '^nickname =' "$conf" | cut -d' ' -f 3)
+            conf="${dir}/.bzr/branch/location" # colo/lightweight branch
+            [[ -z "$branch" ]] && [[ -f "$conf" ]] && branch="$(basename "$(< $conf)")"
+            [[ -z "$branch" ]] && branch="$(basename "$(readlink -f "$dir")")";;
+        esac
+        # optional $1 of format string for printf, default "‡ [%s] "
+        [[ -n "$branch" ]] && printf "${1:-[$logo %s] }" "$branch"
+        return 0
+      fi
+    done
+    dir="$(dirname "$dir")"
+  done
+} # >>>
 
-# prompt parts
-local PS_prompt="%# "
-local PS_time="%D{%H:%M:%S}" # like "%* but uses a leading zero when needed
-local PS_host="@$(hostname)"
-local PS_user="%n$PS_host"
-local PS_cwd="%~"
-local PS_vcsinfo="%r/%S"
+
+PS_prompt="%# "
+PS_time="\t" # like "%* but uses a leading zero when needed
+PS_host="\h"
+PS_user="\u"
+PS_cwd="\w"
+PS_vcsinfo="\$(__vcs_info "$2")"
 
 # comment this line for a distraction-free prompt <<<
-local color_prompt=$COLOR_TERM
+color_prompt=$COLOR_TERM
 if [ "$color_prompt" ]; then
-  autoload colors && colors
-  PS_prompt="%{$fg_bold[white]%}$PS_prompt%{$reset_color%}"
-  PS_host="%{$fg_bold[green]%}$PS_host%{$reset_color%}"
+  PS_prompt="\033[01;37m$PS_prompt\033[00m"
+  PS_host="\033[01;32m$PS_host\033[00m"
   # time: color coded by last return code
-  PS_time="%(?.%{$fg[green]%}.%{$fg[red]%})$PS_time%{$reset_color%}"
+  PS_time="\033[00;31m$PS_time\033[00m"
   # user: color coded by privileges
-  PS_user="%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%})$PS_user%{$reset_color%}"
-  PS_cwd="%{$fg_bold[blue]%}$PS_cwd%{$reset_color%}"
-  PS_vcsinfo="%{$fg[blue]%}$PS_vcsinfo%{$reset_color%}"
+  PS_user="\033[01;32m$PS_user\033[00m"
+  PS_cwd="\033[01;34m$PS_cwd\033[00m"
+  PS_vcsinfo="\033[00;34m$PS_vcsinfo\033[00m"
 fi
 unset color_prompt
 # >>>
 
-# two-line prompt with time + current vcs branch on the right
-setopt prompt_subst
-RPROMPT='${vcs_info_msg_0_}'
-PROMPT="${PS_time} ${PS_user}:${PS_cwd}
+# two-line prompt with time and current vcs branch
+PS1="${PS_time} ${PS_user}:${PS_cwd} ${PS_vcsinfo}
 ${PS_prompt}"
 
 #######################
@@ -279,7 +273,7 @@ fi
 #   START PROGRAMS    #
 #######################
 
-if [ -n "$(whence redshift)" -a -z "$(pgrep redshift)" ] ; then
+if [ -n "$(type redshift 2>/dev/null)" -a -z "$(pgrep redshift)" ] ; then
   echo "launching redshift"
   nohup redshift 2>&1 >/dev/null &
 fi

@@ -78,3 +78,101 @@ done
 if [ -n "$(whence npm)" ]; then
     npm config set prefix '${HOME}/.npm-packages'
 fi
+
+######################
+#        OS X        #
+######################
+#
+#### dock ###
+## remove all application
+#defaults delete com.apple.dock persistent-apps
+#defaults delete com.apple.dock persistent-others
+#
+## add application
+#defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/System Preferences.app/</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+#defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Firefox.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+#defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/iTerm 2.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+#defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Slack.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+#
+## change dock size
+#defaults write com.apple.dock tilesize -int 40
+#
+## set the dock on the right of the screen
+#defaults write com.apple.dock orientation -string "bottom"
+#
+## do not rearrange space based on recent use
+#defaults write com.apple.dock mru-spaces -bool false
+#
+## restart dock to apply changes
+#killall Dock
+#
+#### dock end ###
+#
+#### finder ###
+#
+## set preferred view style
+#defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+#
+## New window points to home
+#defaults write com.apple.finder NewWindowTarget -string "PfHm"
+#
+## Avoid creating .DS_Store files on network volumes
+#defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+#
+## show path bar
+#defaults write com.apple.finder ShowPathbar -int 1
+#
+## show Library folder
+#chflags nohidden ~/Library/
+#
+#### finder end ###
+#
+#### mouse ###
+#
+## scroll not "natural"
+#defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+#
+#### mouse end ###
+#
+#### spotlight ###
+#
+## remove everything from spotlight but applications
+#defaults write com.apple.spotlight orderedItems -array \
+#	'{"enabled" = 1;"name" = "APPLICATIONS";}' \
+#	'{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
+#	'{"enabled" = 0;"name" = "DIRECTORIES";}' \
+#	'{"enabled" = 0;"name" = "PDF";}' \
+#	'{"enabled" = 0;"name" = "FONTS";}' \
+#	'{"enabled" = 0;"name" = "DOCUMENTS";}' \
+#	'{"enabled" = 0;"name" = "MESSAGES";}' \
+#	'{"enabled" = 0;"name" = "CONTACT";}' \
+#	'{"enabled" = 0;"name" = "EVENT_TODO";}' \
+#	'{"enabled" = 0;"name" = "IMAGES";}' \
+#	'{"enabled" = 0;"name" = "BOOKMARKS";}' \
+#	'{"enabled" = 0;"name" = "MUSIC";}' \
+#	'{"enabled" = 0;"name" = "MOVIES";}' \
+#	'{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+#	'{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+#	'{"enabled" = 0;"name" = "SOURCE";}' \
+#	'{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+#	'{"enabled" = 0;"name" = "MENU_OTHER";}' \
+#	'{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+#	'{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
+#	'{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
+#	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+#
+#### spotlight end ###
+#
+#### menu bar ###
+#
+## display hour in 24h format
+#defaults write com.apple.menuextra.clock DateFormat -string "EEE dd/MM/yyyy HH:mm"
+#defaults write NSGlobalDomain AppleICUForce12HourTime -bool false
+#
+#### menu bar end ###
+#
+#### security ###
+#
+#defaults write com.apple.screensaver askForPassword -int 1
+#
+#### security end ###
