@@ -25,7 +25,7 @@ fi
 export HOMEBREW_CACHE="${HOME}/.tmp/brew_cache"
 
 # NodeJs
-if [ "${USER} != "root" ]; then
+if [ "${USER}" != "root" ]; then
   export NPM_PACKAGES=${HOME}/.npm-packages
   export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
 fi
