@@ -119,7 +119,7 @@ if [ -n "$COLOR_TERM" ]; then
   unalias ls 2>/dev/null
   ls --color -d . &>/dev/null 2>&1 \
     && alias ls='ls --group-directories-first --color=auto' \
-    || alias ls='ls --group-directories-first -G' # BSD
+    || alias ls='ls -G' # BSD
 else
   alias ls='ls --group-directories-first'
 fi # >>>
