@@ -9,7 +9,7 @@ augroup reload_vimrc " {
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END " }
 
-call plug#begin($REMOTE_HOME.'/.nvim_plugged')
+call plug#begin($HOME.'/.nvim_plugged')
 
 Plug 'fabi1cazenave/kalahari.vim'
 Plug 'tpope/vim-repeat'
@@ -55,8 +55,8 @@ set ignorecase
 set smartcase                    " if no caps in patern, not case sensitive
 
 " Put all backup and swap in one place
-set backupdir=$REMOTE_HOME/.tmp/nvim,$REMOTE_HOME/.tmp,/tmp
-set directory=$REMOTE_HOME/.tmp/nvim,$REMOTE_HOME/.tmp,/tmp
+set backupdir=$HOME/.tmp/nvim,$HOME/.tmp,/tmp
+set directory=$HOME/.tmp/nvim,$HOME/.tmp,/tmp
 
 if has("vms")
   set nobackup                   " use versions instead of backup file
